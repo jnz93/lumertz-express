@@ -8,12 +8,12 @@ Na dashboard o administrador poderá configurar datas, horários e adicionar cla
 
 ### Por exemplo. suponhamos que sejam dois tipos/classes de entrega:
 - Expressa: Entrega em até 3 horas.
- - Período: 09:00 AM - 18:00 PM
- - Valor: R$10,00
- > Disponível para agendamento de no mínimo um dia antes.
+    - Período: 09:00 AM - 18:00 PM
+    - Valor: R$10,00
+    > Disponível para agendamento de no mínimo um dia antes.
 - Comercial: Sem tempo definido
- - Período: 09:00 AM - 18:00 PM
- - Valor: 00,00(Grátis)
+    - Período: 09:00 AM - 18:00 PM
+    - Valor: 00,00(Grátis)
 
 > Classes de entrega disponíveis apenas nas cidades de Porto Alegre-RS e Alvorada-RS.
 
