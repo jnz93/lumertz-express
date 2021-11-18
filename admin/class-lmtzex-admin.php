@@ -52,6 +52,11 @@ class Lmtzex_Admin {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
+		/**
+		 * Adição da página de configuração no menu wordpress
+		 *
+		 */
+		add_action( 'admin_menu', array( $this, 'registerSettingsMenuPage') );
 	}
 
 	/**
@@ -99,5 +104,31 @@ class Lmtzex_Admin {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lmtzex-admin.js', array( 'jquery' ), $this->version, false );
 
 	}
+
+	/**
+	 * 
+	 */
+	public function registerSettingsMenuPage()
+	{
+		# Configurações
+		$page_title = 'Lummertz Express - Configurações';
+		$menu_title = 'Lummertz Express';
+		$menu_slug 	= 'lummertz-express';
+		$capability = '5';
+		$icon_url 	= plugin_dir_url( __FILE__ ) . 'img/delivery-icon.png';
+		$position 	= 20;
+
+		add_menu_page( $page_title, $menu_title, $capability, $menu_slug, array( $this, 'importSettingsPage' ), $icon_url, $position );
+	}
+
+	/**
+	 * Importação do layout da página de administração do plugin
+	 * 
+	 */
+	public function importSettingsPage()
+	{
+		require_once plugin_dir_path( __FILE__ ) . 'partials/lmtzex-admin-display.php';
+	}
+
 
 }
