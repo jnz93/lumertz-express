@@ -52,6 +52,8 @@ class Lmtzex_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
+		add_action( 'woocommerce_before_cart_table', array( $this, 'displayCustomCheckoutField' ), 10, 1 );
+		add_action( 'wp_footer', array( $this, 'checkoutDeliveryJqueryScript' ) );
 	}
 
 	/**
@@ -108,4 +110,70 @@ class Lmtzex_Public {
 
 	}
 
+	/**
+	 * Mostrar o datepicker no carrinho e checkout
+	 * 
+	 * @param object $checkout
+	 */
+	public function displayCustomCheckoutField( $checkout )
+	{
+		# Define time zone
+		date_default_timezone_set( 'America/Sao_Paulo' );
+
+		echo '<div id="my_custom_checkout_field">
+		<h3>'.__('Agendar entrega: ').'</h3>';
+
+		# Hide datetimepicker container field
+		// echo '<style>.shipping__table, .shipping__table--multiple{ display: none;}</style>';
+
+		// DateTimePicker
+		woocommerce_form_field( 'delivery_date', array(
+			'type'          => 'text',
+			'class'         => array('my-field-class form-row-wide off'),
+			'id'            => 'datetimepicker',
+			'required'      => true,
+			'label'         => __('Selecione uma data'),
+			'placeholder'   => __(''),
+			'options'       => array('' => __('', 'woocommerce' ))
+		),'');
+
+		echo '</div>';
+	}
+
+	/**
+	 * Script para manipular o datetimerpicker
+	 * 
+	 */
+	public function checkoutDeliveryJqueryScript() {
+		// Only on front-end and checkout page
+		if( is_checkout() || is_cart() && !is_wc_endpoint_url() ):
+		?>
+		<script>
+		jQuery(function($){
+			var d = '#datetimepicker',
+				f = d+'_field',
+				hours = ['11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00', '22:30'];
+	
+			// $(f).hide();
+		
+			$(d).datetimepicker({
+				format: 'd.m.Y H:i',
+				allowTimes: hours,
+				minDate:'-1970/01/1',
+				minTime:'12:00',
+			});
+
+			$(d).change( function(){
+				if( jQuery(this).val() != '' ){
+					jQuery('.shipping__table, .shipping__table--multiple').show();
+				} else {
+					jQuery('.shipping__table, .shipping__table--multiple').hide();
+				}
+			});
+		});
+		</script>
+		<?php
+	
+		endif;
+	}
 }
