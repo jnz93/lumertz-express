@@ -57,6 +57,8 @@ class Lmtzex_Admin {
 		 *
 		 */
 		add_action( 'admin_menu', array( $this, 'registerSettingsMenuPage') );
+
+		add_action( 'admin_init', array( $this, 'registerSettingsOptionGroup' ) );
 	}
 
 	/**
@@ -130,5 +132,33 @@ class Lmtzex_Admin {
 		require_once plugin_dir_path( __FILE__ ) . 'partials/lmtzex-admin-display.php';
 	}
 
+	public function registerSettingsOptionGroup()
+	{
+		$optionsToRegister = array(
+			'_lmrtz_period_active',
+			'_lmrtz_delivery_active_sunday',
+			'_lmrtz_delivery_active_monday',
+			'_lmrtz_delivery_active_tuesday',
+			'_lmrtz_delivery_active_wednesday',
+			'_lmrtz_delivery_active_thursday',
+			'_lmrtz_delivery_active_friday',
+			'_lmrtz_delivery_active_saturday',
+			'_lmtzex_delivery_start_hour',
+			'_lmtzex_delivery_start_min',
+			'_lmtzex_delivery_end_hour',
+			'_lmtzex_delivery_end_min',
+			'_lmrtz_same_day_delivery',
+			'_lmrtz_same_day_delivery_hour_limit',
+			'_lmrtz_same_day_delivery_min_limit',
+			'_lmtzex_color_holidays',
+			'_lmtzex_color_hour_limit',
+			'_lmtzex_color_available',
+		);
+		$option_group 	= 'lmtzez_settings';
+		
+		foreach( $optionsToRegister as $option_name ){
+			register_setting( $option_group, $option_name );
+		}
+	}
 
 }
