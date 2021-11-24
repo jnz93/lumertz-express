@@ -149,6 +149,7 @@ class Lmtzex_Public {
 		if( is_checkout() || is_cart() && !is_wc_endpoint_url() ):
 		?>
 		<script>
+			jQuery.datetimepicker.setLocale('pt-BR');
 		jQuery(function($){
 			var d = '#datetimepicker',
 				f = d+'_field',
