@@ -147,33 +147,141 @@ class Lmtzex_Public {
 	public function checkoutDeliveryJqueryScript() {
 		// Only on front-end and checkout page
 		if( is_checkout() || is_cart() && !is_wc_endpoint_url() ):
-		?>
-		<script>
-			jQuery.datetimepicker.setLocale('pt-BR');
-		jQuery(function($){
-			var d = '#datetimepicker',
-				f = d+'_field',
-				hours = ['11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00', '22:30'];
+			
+			# Actived settings
+			$isActivated 		= get_option( '_lmrtz_period_active', true );
 	
-			// $(f).hide();
-		
-			$(d).datetimepicker({
-				format: 'd.m.Y H:i',
-				allowTimes: hours,
-				minDate:'-1970/01/1',
-				minTime:'12:00',
-			});
-
-			$(d).change( function(){
-				if( jQuery(this).val() != '' ){
-					jQuery('.shipping__table, .shipping__table--multiple').show();
+			# Definição dos dias ativados e desativados
+			$activatedDays 		= array();
+			$desactivatedDays 	= array();
+			$weekDays 		 	= array(
+				'sunday'	=> '0',
+				'monday'	=> '1',
+				'tuesday'	=> '2',
+				'wednesday'	=> '3',
+				'thursday'	=> '4',
+				'friday'	=> '5',
+				'saturday'	=> '6',
+			);
+			$keysOfWeek 		= array(
+				'sunday'	=> '_lmrtz_delivery_active_sunday',
+				'monday'	=> '_lmrtz_delivery_active_monday',
+				'tuesday'	=> '_lmrtz_delivery_active_tuesday',
+				'wednesday'	=> '_lmrtz_delivery_active_wednesday',
+				'thursday'	=> '_lmrtz_delivery_active_thursday',
+				'friday'	=> '_lmrtz_delivery_active_friday',
+				'saturday'	=> '_lmrtz_delivery_active_saturday',
+			);
+			foreach( $keysOfWeek as $day => $key ){
+				$data = get_option( $key, true );
+				if( $data ){
+					$activatedDays[] = $day;
 				} else {
-					jQuery('.shipping__table, .shipping__table--multiple').hide();
+					$desactivatedDays[] = (int) $weekDays[$day];
 				}
+			}
+			$desactivatedDays = json_encode( $desactivatedDays );
+
+			# Definição de horários ativados
+			$deliveryStartHour 	= get_option( '_lmtzex_delivery_start_hour', true );
+			$deliveryStartMin 	= get_option( '_lmtzex_delivery_start_min', true );
+			$deliveryStart 		= $deliveryStartHour . ':' . $deliveryStartMin;
+
+			$deliveryEndHour 	= get_option( '_lmtzex_delivery_end_hour', true );
+			$deliveryEndMin 	= get_option( '_lmtzex_delivery_end_min', true );
+			$deliveryEnd 		= $deliveryEndHour . ':' . $deliveryEndMin;
+
+			$hours 				= array(
+				'00:00',
+				'00:30',
+				'01:00',
+				'01:30',
+				'02:00',
+				'02:30',
+				'03:00',
+				'03:30',
+				'04:00',
+				'04:30',
+				'05:00',
+				'05:30',
+				'06:00',
+				'06:30',
+				'07:00',
+				'07:30',
+				'08:00',
+				'08:30',
+				'09:00',
+				'09:30',
+				'10:00',
+				'10:30',
+				'11:00',
+				'11:30',
+				'12:00',
+				'12:30',
+				'13:00',
+				'13:30',
+				'14:00',
+				'14:30',
+				'15:00',
+				'15:30',
+				'16:00',
+				'16:30',
+				'17:00',
+				'17:30',
+				'18:00',
+				'18:30',
+				'19:00',
+				'19:30',
+				'20:00',
+				'20:30',
+				'21:00',
+				'21:30',
+				'22:00',
+				'22:30',
+				'23:00',
+				'23:30',
+			);
+			$posStartHour 		= array_search( $deliveryStart, $hours );
+			$posEndHour 		= array_search( $deliveryEnd, $hours);
+			$deliveryHours 		= json_encode( array_slice( $hours, $posStartHour, ( $posEndHour+1 - $posStartHour ) ) );
+
+			# Habilitado entrega no mesmo dia
+			$isSameDayActivated = get_option( '_lmrtz_same_day_delivery', true );
+			$sameDayHourLimit 	= get_option( '_lmrtz_same_day_delivery_hour_limit', true );
+			$sameDayMinLimit 	= get_option( '_lmrtz_same_day_delivery_min_limit', true );
+			$sameDayLimit 		= $sameDayHourLimit . ':' . $sameDayMinLimit;
+
+			$holidaysColor 		= get_option( '_lmtzex_color_holidays', true );
+			$hourLimitColor		= get_option( '_lmtzex_color_hour_limit', true );
+			$availableColor 	= get_option( '_lmtzex_color_available', true );
+
+			?>
+			<script>
+			jQuery.datetimepicker.setLocale('pt-BR');
+			jQuery(function($){
+				var d = '#datetimepicker',
+					f = d+'_field',
+					hours = <?php echo $deliveryHours; ?>,
+					disabledDays = <?php echo $desactivatedDays; ?>;
+					
+				$(d).datetimepicker({
+					format: 'd.m.Y H:i',
+					allowTimes: hours,
+					disabledWeekDays: disabledDays,
+					minDate: '-1970/01/1',
+					setLocale: 'pt-BR'
+				});
+
+				$(d).change( function(){
+					if( jQuery(this).val() != '' ){
+						jQuery('.shipping__table, .shipping__table--multiple').show();
+					} else {
+						jQuery('.shipping__table, .shipping__table--multiple').hide();
+					}
+				});
 			});
-		});
-		</script>
-		<?php
+			</script>
+			<?php
 	
 		endif;
 	}
