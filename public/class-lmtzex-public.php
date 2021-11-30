@@ -246,10 +246,19 @@ class Lmtzex_Public {
 			$deliveryHours 		= json_encode( array_slice( $hours, $posStartHour, ( $posEndHour+1 - $posStartHour ) ) );
 
 			# Habilitado entrega no mesmo dia
-			$isSameDayActivated = get_option( '_lmrtz_same_day_delivery', true );
-			$sameDayHourLimit 	= get_option( '_lmrtz_same_day_delivery_hour_limit', true );
-			$sameDayMinLimit 	= get_option( '_lmrtz_same_day_delivery_min_limit', true );
-			$sameDayLimit 		= $sameDayHourLimit . ':' . $sameDayMinLimit;
+			$isSameDayActivated 	= get_option( '_lmrtz_same_day_delivery', true );
+			$sameDayHourLimit 		= get_option( '_lmrtz_same_day_delivery_hour_limit', true );
+			$sameDayMinLimit 		= get_option( '_lmrtz_same_day_delivery_min_limit', true );
+			$sameDayLimit 			= $sameDayHourLimit . ':' . $sameDayMinLimit;
+			
+			# Definição de datas desabilitadas
+			$disabledDates 			= array();
+			$currentHour			= date_i18n( 'H:i' );
+			$currentDate 			= date_i18n( 'd/m/Y' );
+			if( $currentHour > $sameDayLimit ){
+				$disabledDates[]	= $currentDate;
+			}
+			$disabledDates 			= json_encode( $disabledDates );
 
 			$holidaysColor 		= get_option( '_lmtzex_color_holidays', true );
 			$hourLimitColor		= get_option( '_lmtzex_color_hour_limit', true );
@@ -262,12 +271,15 @@ class Lmtzex_Public {
 				var d = '#datetimepicker',
 					f = d+'_field',
 					hours = <?php echo $deliveryHours; ?>,
-					disabledWeekdays = <?php echo $disabledWeekDays; ?>;
+					disabledWeekdays = <?php echo $disabledWeekDays; ?>,
+					disabledDatesList = <?php echo $disabledDates; ?>;
 					
 				$(d).datetimepicker({
 					format: 'd.m.Y H:i',
 					allowTimes: hours,
 					disabledWeekDays: disabledWeekdays,
+					disabledDates: disabledDatesList,
+					formatDate: 'd/m/Y',
 					minDate: '-1970/01/1',
 					setLocale: 'pt-BR'
 				});
