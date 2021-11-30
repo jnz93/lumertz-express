@@ -152,6 +152,7 @@ class Lmtzex_Public {
 			$isActivated 		= get_option( '_lmrtz_period_active', true );
 	
 			# Definição dos dias ativados e desativados
+			$enabledWeekDays 	= array();
 			$disabledWeekDays 	= array();
 			$weekDays 		 	= array(
 				'sunday'	=> '0',
@@ -174,7 +175,7 @@ class Lmtzex_Public {
 			foreach( $keysOfWeek as $day => $key ){
 				$data = get_option( $key, true );
 				if( $data ){
-					$activatedDays[] = $day;
+					$enabledWeekDays[] = $day;
 				} else {
 					$disabledWeekDays[] = (int) $weekDays[$day];
 				}
