@@ -152,8 +152,7 @@ class Lmtzex_Public {
 			$isActivated 		= get_option( '_lmrtz_period_active', true );
 	
 			# Definição dos dias ativados e desativados
-			$activatedDays 		= array();
-			$desactivatedDays 	= array();
+			$disabledWeekDays 	= array();
 			$weekDays 		 	= array(
 				'sunday'	=> '0',
 				'monday'	=> '1',
@@ -177,10 +176,10 @@ class Lmtzex_Public {
 				if( $data ){
 					$activatedDays[] = $day;
 				} else {
-					$desactivatedDays[] = (int) $weekDays[$day];
+					$disabledWeekDays[] = (int) $weekDays[$day];
 				}
 			}
-			$desactivatedDays = json_encode( $desactivatedDays );
+			$disabledWeekDays = json_encode( $disabledWeekDays );
 
 			# Definição de horários ativados
 			$deliveryStartHour 	= get_option( '_lmtzex_delivery_start_hour', true );
@@ -262,12 +261,12 @@ class Lmtzex_Public {
 				var d = '#datetimepicker',
 					f = d+'_field',
 					hours = <?php echo $deliveryHours; ?>,
-					disabledDays = <?php echo $desactivatedDays; ?>;
+					disabledWeekdays = <?php echo $disabledWeekDays; ?>;
 					
 				$(d).datetimepicker({
 					format: 'd.m.Y H:i',
 					allowTimes: hours,
-					disabledWeekDays: disabledDays,
+					disabledWeekDays: disabledWeekdays,
 					minDate: '-1970/01/1',
 					setLocale: 'pt-BR'
 				});
