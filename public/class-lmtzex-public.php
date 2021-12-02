@@ -52,8 +52,7 @@ class Lmtzex_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
-		add_action( 'woocommerce_before_cart_table', array( $this, 'displayCustomCheckoutField' ), 10, 1 );
-		add_action( 'wp_footer', array( $this, 'checkoutDeliveryJqueryScript' ) );
+		add_action('woocommerce_checkout_update_order_meta', array( $this, 'saveOrderDeliveryDate'), 10, 1 );
 	}
 
 	/**
@@ -127,15 +126,15 @@ class Lmtzex_Public {
 		// echo '<style>.shipping__table, .shipping__table--multiple{ display: none;}</style>';
 
 		// DateTimePicker
-		woocommerce_form_field( 'delivery_date', array(
+		woocommerce_form_field( 'lmtzex_delivery_date', array(
 			'type'          => 'text',
 			'class'         => array('my-field-class form-row-wide off'),
-			'id'            => 'datetimepicker',
+			'id'            => 'lmtzex_delivery_date',
 			'required'      => true,
-			'label'         => __('Selecione uma data'),
-			'placeholder'   => __(''),
+			'label'         => __('Entrega'),
+			'placeholder'   => __('Selecione data e horário'),
 			'options'       => array('' => __('', 'woocommerce' ))
-		),'');
+		), $_POST['lmtzex_delivery_date']);
 
 		echo '</div>';
 	}
@@ -297,4 +296,15 @@ class Lmtzex_Public {
 	
 		endif;
 	}
+
+	/**
+	 * Salvar o valor do input do datetimepicker no pedido
+	 * 
+	 * @param integer $order_id
+	 */	
+	public function saveOrderDeliveryDate( $order_id ) {
+		if( !empty( $_POST['lmtzex_delivery_date'] ) )
+			update_post_meta( $order_id, 'lmtzex_delivery_date', sanitize_text_field( $_POST['lmtzex_delivery_date'] ) );
+	}
+
 }
