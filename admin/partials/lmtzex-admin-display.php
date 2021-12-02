@@ -207,6 +207,16 @@ $minutes = [
                         <label for="">Cores no calendário para representar dias e horários disponíveis para entregas.</label>
                     </td>
                 </tr>
+                <tr>
+                    <th scope="row">Datas especiais:</th>
+                    <td>
+                        <div class="">
+                            <input type="text" name="_lmtzex_daysoff" id="_lmtzex_daysoff" value="<?php echo get_option( '_lmtzex_daysoff' ) != false ? get_option( '_lmtzex_daysoff' ) : ''; ?>">
+                        </div>
+                        <label for="_lmtzex_daysoff">Adicione datas em que as entregas não vão funcionar.</label>
+                        <span>Dica: Separe datas por vírgula, por exemplo: 01/01/2022, 02/01/2022, 03/04/2022, etc...</span>
+                    </td>
+                </tr>
             </tbody>
         </table>
         <?php submit_button( ); ?>

@@ -153,6 +153,7 @@ class Lmtzex_Admin {
 			'_lmtzex_color_holidays',
 			'_lmtzex_color_hour_limit',
 			'_lmtzex_color_available',
+			'_lmtzex_daysoff',
 		);
 		$option_group 	= 'lmtzez_settings';
 		
