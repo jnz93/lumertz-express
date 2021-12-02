@@ -251,13 +251,21 @@ class Lmtzex_Public {
 			$sameDayLimit 			= $sameDayHourLimit . ':' . $sameDayMinLimit;
 			
 			# Definição de datas desabilitadas
-			$disabledDates 			= array();
+			$disabledDates 			= array(); # Dias da semana
 			$currentHour			= date_i18n( 'H:i' );
 			$currentDate 			= date_i18n( 'd/m/Y' );
+			$isEnabledSameDay 		= 1; # 0=não/1=sim
 			if( $currentHour > $sameDayLimit ){
+				$isEnabledSameDay 	= 0;
 				$disabledDates[]	= $currentDate;
 			}
-			$disabledDates 			= json_encode( $disabledDates );
+			$daysOff 				= get_option( '_lmtzex_daysoff', true );
+			$daysOffArr 			= array_filter( explode(',', $daysOff ) );
+			foreach( $daysOffArr as $dayOff )
+			{
+				$disabledDates[] = trim($dayOff);
+			}
+			$disabledDates 		= json_encode( $disabledDates );
 
 			$holidaysColor 		= get_option( '_lmtzex_color_holidays', true );
 			$hourLimitColor		= get_option( '_lmtzex_color_hour_limit', true );
