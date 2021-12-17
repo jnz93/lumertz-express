@@ -189,7 +189,7 @@ $minutes = [
                         <label for="_lmrtz_same_day_delivery_hour_limit">Entrega para dia atual será desativado se um pedido for feito após a hora mencionada neste campo.</label>
                     </td>
                 </tr>
-                <tr>
+                <tr style="display: none !important">
                     <th scope="row">Cores no calendário:</th>
                     <td>
                         <div class="">
